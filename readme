@@ -1,0 +1,9 @@
+1. be able run the project :) (ios simulator)
+2. fix bugs
+3. refactor and optimize the code as much as possible
+4. translate to TypeScript
+5. improve project structure for future code updates (new screens etc)
+6. [Optional] add script to package json for running prettifier, linters and tsc checks
+7. [Optional] configure redux logs
+
+Deadline: 1 day since you receive this project, the faster the better.
