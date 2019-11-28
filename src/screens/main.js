@@ -5,6 +5,7 @@ import { RefreshControl, FlatList, SafeAreaView, StyleSheet } from 'react-native
 import api from '../../api';
 import Car from '../components/car';
 import Button from '../components/button';
+import { actions } from '../store';
 
 const styles = StyleSheet.create({
   flex: {
@@ -123,13 +124,7 @@ class MainScreen extends React.Component {
   }
 }
 
-export default connect(
-  state => ({
-    people: state.people,
-    theme: state.theme,
-  }),
-  dispatch => ({
-    updatePeople: people => dispatch({type: 'UPDATE_PEOPLE', people}),
-    toggleTheme: () => dispatch({type: 'TOGGLE_THEME'}),
-  }),
-)(MainScreen);
+export default connect(({ people, theme }) => ({
+  people,
+  theme,
+}), actions)(MainScreen);
