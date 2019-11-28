@@ -2,7 +2,7 @@ export default {
   loadData: async () => {
     return new Promise(resolve => {
       setTimeout(() => {
-        resolve(backendData);
+        resolve(backendData.slice());
       }, 1000);
     })
   },
