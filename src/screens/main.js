@@ -1,10 +1,16 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { RefreshControl, FlatList, SafeAreaView } from 'react-native';
+import { RefreshControl, FlatList, SafeAreaView, StyleSheet } from 'react-native';
 
 import api from '../../api';
 import Car from '../components/car';
 import Button from '../components/button';
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+});
 
 class MainScreen extends React.Component {
   state = {
@@ -102,11 +108,11 @@ class MainScreen extends React.Component {
     let { cars, loading } = this.state;
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.flex}>
         <FlatList
           data={cars}
           extraData={loading}
-          style={{ flex: 1 }}
+          style={styles.flex}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
           refreshControl={this.renderRefreshControl()}
