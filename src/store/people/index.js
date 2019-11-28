@@ -1,9 +1,9 @@
-import { updatePeopleAction, updatePeople } from '../actions';
+import {updatePeopleAction, updatePeople} from '../actions';
 
 export default function reducer(state = [], action) {
   switch (action.type) {
     case updatePeopleAction: {
-      let { people } = action.payload;
+      let {people} = action.payload;
 
       return people;
     }
@@ -13,4 +13,4 @@ export default function reducer(state = [], action) {
   }
 }
 
-export { updatePeople };
+export {updatePeople};

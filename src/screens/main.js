@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { RefreshControl, FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import {RefreshControl, FlatList, SafeAreaView, StyleSheet} from 'react-native';
 
 import api from '../../api';
 import Car from '../components/car';
 import Button from '../components/button';
-import { actions } from '../store';
+import {actions} from '../store';
 
 const styles = StyleSheet.create({
   flex: {
@@ -19,7 +19,7 @@ class MainScreen extends React.Component {
   };
 
   _onRefresh = () => {
-    this.setState(({ loading }) => {
+    this.setState(({loading}) => {
       if (!loading) {
         this.loadData();
       }
@@ -31,38 +31,29 @@ class MainScreen extends React.Component {
   };
 
   _onTheme = () => {
-    let { toggleTheme } = this.props;
+    let {toggleTheme} = this.props;
 
     toggleTheme();
   };
 
   _renderHeader = () => {
-    return (
-      <Button title='Toggle theme' onPress={this._onTheme} />
-    );
+    return <Button title="Toggle theme" onPress={this._onTheme} />;
   };
 
-  _renderItem = ({ item: props }) => {
-    let { theme } = this.props;
+  _renderItem = ({item: props}) => {
+    let {theme} = this.props;
 
-    return (
-      <Car {...props} theme={theme} />
-    );
+    return <Car {...props} theme={theme} />;
   };
 
-  _keyExtractor = ({ brand }) => brand;
+  _keyExtractor = ({brand}) => brand;
 
   componentDidMount() {
     this.loadData();
   }
 
   componentDidUpdate(prevProps) {
-    let { people } = this.props;
-    let { loading } = this.state;
-
-    if (loading && people !== prevProps.people) {
-      this.setState({ loading: false });
-    }
+    let {people} = this.props;
 
     if (people !== prevProps.people) {
       this.updateCars();
@@ -70,43 +61,37 @@ class MainScreen extends React.Component {
   }
 
   loadData() {
-    let { updatePeople } = this.props;
+    let {updatePeople} = this.props;
 
-    api
-      .loadData()
-      .then((data) => {
-        updatePeople(data);
-      });
+    api.loadData().then(data => {
+      updatePeople(data);
+    });
   }
 
   updateCars() {
-    let { people } = this.props;
+    let {people} = this.props;
 
-    let cars = people
-      .reduce((store, { car }) => {
-        let amount = store[car.name] || 0;
+    let cars = people.reduce((store, {car}) => {
+      let amount = store[car.name] || 0;
 
-        store[car.name] = amount + 1;
+      store[car.name] = amount + 1;
 
-        return store;
-      }, {});
+      return store;
+    }, {});
 
-    cars = Object.keys(cars)
-      .map((brand) => ({ brand, amount: cars[brand] }));
+    cars = Object.keys(cars).map(brand => ({brand, amount: cars[brand]}));
 
-    this.setState({ cars });
+    this.setState({cars, loading: false});
   }
 
   renderRefreshControl() {
-    let { loading } = this.state;
+    let {loading} = this.state;
 
-    return (
-      <RefreshControl onRefresh={this._onRefresh} refreshing={loading} />
-    );
+    return <RefreshControl onRefresh={this._onRefresh} refreshing={loading} />;
   }
 
   render() {
-    let { cars, loading } = this.state;
+    let {cars, loading} = this.state;
 
     return (
       <SafeAreaView style={styles.flex}>
@@ -120,11 +105,14 @@ class MainScreen extends React.Component {
           ListHeaderComponent={this._renderHeader}
         />
       </SafeAreaView>
-    )
+    );
   }
 }
 
-export default connect(({ people, theme }) => ({
-  people,
-  theme,
-}), actions)(MainScreen);
+export default connect(
+  ({people, theme}) => ({
+    people,
+    theme,
+  }),
+  actions,
+)(MainScreen);

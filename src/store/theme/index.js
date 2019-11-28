@@ -1,11 +1,9 @@
-import { toggleThemeAction, toggleTheme } from '../actions';
+import {toggleThemeAction, toggleTheme} from '../actions';
 
 export default function reducer(state = 'light', action) {
   switch (action.type) {
     case toggleThemeAction: {
-      let theme = state === 'light'?
-        'dark':
-        'light';
+      let theme = state === 'light' ? 'dark' : 'light';
 
       return theme;
     }
@@ -15,4 +13,4 @@ export default function reducer(state = 'light', action) {
   }
 }
 
-export { toggleTheme };
+export {toggleTheme};

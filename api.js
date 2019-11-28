@@ -4,7 +4,7 @@ export default {
       setTimeout(() => {
         resolve(backendData.slice());
       }, 1000);
-    })
+    });
   },
 };
 
