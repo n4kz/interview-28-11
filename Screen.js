@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {View, RefreshControl, ScrollView, TouchableOpacity, Text, SafeAreaView} from 'react-native';
 import api from './api';
+import Car from './src/components/car';
 
 class Screen extends React.Component {
   state = {
@@ -44,6 +45,8 @@ class Screen extends React.Component {
   }
 
   render() {
+    let { theme } = this.props;
+
     let cars = this.props.people
       .map(x => x.car.name)
       .filter((x, i, arr) => arr.indexOf(x) === i);
@@ -58,14 +61,7 @@ class Screen extends React.Component {
           <TouchableOpacity onPress={() => this.props.toggleTheme()}>
             <Text style={{ borderRadius: 4, margin: 8, padding: 8, backgroundColor: '#cae', alignSelf: 'stretch', textAlign: 'center' }}>Toogle theme</Text>
           </TouchableOpacity>
-          {cars.map((car, i) => {
-            return (
-              <View style={{ padding: 15, backgroundColor: this.props.theme === 'light' ? 'white' : '#aaa' }}>
-                <Text style={{fontSize: 16}}>Brand: {car}</Text>
-                <Text style={{marginTop: 4}}>Amount: {amounts[i]}</Text>
-              </View>
-            )
-          })}
+          {cars.map((car, index) => <Car brand={car} amount={amounts[index]} theme={theme} />)}
         </ScrollView>
       </SafeAreaView>
     )
