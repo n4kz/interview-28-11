@@ -27,6 +27,14 @@ class Screen extends React.Component {
     toggleTheme();
   };
 
+  _renderRefreshControl = () => {
+    let { loading } = this.state;
+
+    return (
+      <RefreshControl onRefresh={this._onRefresh} refreshing={loading} />
+    );
+  };
+
   componentDidMount() {
     this.loadData();
   }
@@ -80,7 +88,7 @@ class Screen extends React.Component {
       <SafeAreaView style={{ flex:1 }}>
         <ScrollView
           style={{ flex:1 }}
-          refreshControl={<RefreshControl onRefresh={this._onRefresh} refreshing={this.state.loading}/>}>
+          refreshControl={this._renderRefreshControl}>
           <TouchableOpacity onPress={this._onTheme}>
             <Text style={{ borderRadius: 4, margin: 8, padding: 8, backgroundColor: '#cae', alignSelf: 'stretch', textAlign: 'center' }}>Toogle theme</Text>
           </TouchableOpacity>
