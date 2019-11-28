@@ -1,8 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {View, RefreshControl, ScrollView, TouchableOpacity, Text, SafeAreaView} from 'react-native';
+
 import api from './api';
 import Car from './src/components/car';
+import Button from './src/components/button';
 
 class Screen extends React.Component {
   state = {
@@ -89,9 +91,7 @@ class Screen extends React.Component {
         <ScrollView
           style={{ flex:1 }}
           refreshControl={this._renderRefreshControl}>
-          <TouchableOpacity onPress={this._onTheme}>
-            <Text style={{ borderRadius: 4, margin: 8, padding: 8, backgroundColor: '#cae', alignSelf: 'stretch', textAlign: 'center' }}>Toogle theme</Text>
-          </TouchableOpacity>
+          <Button title='Toggle theme' onPress={this._onTheme} />
           {cars.map((props) => <Car {...props} theme={theme} />)}
         </ScrollView>
       </SafeAreaView>
