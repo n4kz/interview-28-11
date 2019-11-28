@@ -6,16 +6,40 @@ import api from './api';
 class Screen extends React.Component {
   state = {
     loading: true,
+  };
+
+  _onRefresh = () => {
+    this.setState(({ loading }) => {
+      if (!loading) {
+        this.loadData();
+      }
+
+      return {
+        loading: true,
+      };
+    });
+  };
+
+  componentDidMount() {
+    this.loadData();
   }
 
-  constructor(props) {
-    super(props)
+  componentDidUpdate(prevProps) {
+    let { people } = this.props;
+    let { loading } = this.state;
+
+    if (loading && people !== prevProps.people) {
+      this.setState({ loading: false });
+    }
+  }
+
+  loadData() {
+    let { updatePeople } = this.props;
+
     api
       .loadData()
-      .then(data => {
-        console.log(this.props)
-        this.props.updatePeople(data);
-        this.setState({ loading: false })
+      .then((data) => {
+        updatePeople(data);
       });
   }
 
@@ -30,7 +54,7 @@ class Screen extends React.Component {
       <SafeAreaView style={{ flex:1 }}>
         <ScrollView
           style={{ flex:1 }}
-          refreshControl={<RefreshControl onRefresh={() => this.refresh()} refreshing={this.state.loading}/>}>
+          refreshControl={<RefreshControl onRefresh={this._onRefresh} refreshing={this.state.loading}/>}>
           <TouchableOpacity onPress={() => this.props.toggleTheme()}>
             <Text style={{ borderRadius: 4, margin: 8, padding: 8, backgroundColor: '#cae', alignSelf: 'stretch', textAlign: 'center' }}>Toogle theme</Text>
           </TouchableOpacity>
@@ -45,13 +69,6 @@ class Screen extends React.Component {
         </ScrollView>
       </SafeAreaView>
     )
-  }
-
-  async refresh() {
-    this.setState({loading: true});
-    let data = await api.loadData();
-    this.props.updatePeople(data);
-    this.setState({loading: false});
   }
 }
 
