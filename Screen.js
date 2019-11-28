@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {View, RefreshControl, ScrollView, TouchableOpacity, Text, SafeAreaView} from 'react-native';
+import { RefreshControl, FlatList, SafeAreaView } from 'react-native';
 
 import api from './api';
 import Car from './src/components/car';
@@ -29,13 +29,21 @@ class Screen extends React.Component {
     toggleTheme();
   };
 
-  _renderRefreshControl = () => {
-    let { loading } = this.state;
-
+  _renderHeader = () => {
     return (
-      <RefreshControl onRefresh={this._onRefresh} refreshing={loading} />
+      <Button title='Toggle theme' onPress={this._onTheme} />
     );
   };
+
+  _renderItem = ({ item: props }) => {
+    let { theme } = this.props;
+
+    return (
+      <Car {...props} theme={theme} />
+    );
+  };
+
+  _keyExtractor = ({ brand }) => brand;
 
   componentDidMount() {
     this.loadData();
@@ -82,18 +90,28 @@ class Screen extends React.Component {
     this.setState({ cars });
   }
 
-  render() {
-    let { theme } = this.props;
-    let { cars = [] } = this.state;
+  renderRefreshControl() {
+    let { loading } = this.state;
 
     return (
-      <SafeAreaView style={{ flex:1 }}>
-        <ScrollView
-          style={{ flex:1 }}
-          refreshControl={this._renderRefreshControl}>
-          <Button title='Toggle theme' onPress={this._onTheme} />
-          {cars.map((props) => <Car {...props} theme={theme} />)}
-        </ScrollView>
+      <RefreshControl onRefresh={this._onRefresh} refreshing={loading} />
+    );
+  }
+
+  render() {
+    let { cars, loading } = this.state;
+
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <FlatList
+          data={cars}
+          extraData={loading}
+          style={{ flex: 1 }}
+          renderItem={this._renderItem}
+          keyExtractor={this._keyExtractor}
+          refreshControl={this.renderRefreshControl()}
+          ListHeaderComponent={this._renderHeader}
+        />
       </SafeAreaView>
     )
   }
