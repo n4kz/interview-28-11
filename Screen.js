@@ -32,6 +32,10 @@ class Screen extends React.Component {
     if (loading && people !== prevProps.people) {
       this.setState({ loading: false });
     }
+
+    if (people !== prevProps.people) {
+      this.updateCars();
+    }
   }
 
   loadData() {
@@ -44,14 +48,27 @@ class Screen extends React.Component {
       });
   }
 
+  updateCars() {
+    let { people } = this.props;
+
+    let cars = people
+      .reduce((store, { car }) => {
+        let amount = store[car.name] || 0;
+
+        store[car.name] = amount + 1;
+
+        return store;
+      }, {});
+
+    cars = Object.keys(cars)
+      .map((brand) => ({ brand, amount: cars[brand] }));
+
+    this.setState({ cars });
+  }
+
   render() {
     let { theme } = this.props;
-
-    let cars = this.props.people
-      .map(x => x.car.name)
-      .filter((x, i, arr) => arr.indexOf(x) === i);
-
-    let amounts = cars.map(car => this.props.people.reduce((result, p) => p.car.name === car ? result + 1 : result, 0));
+    let { cars = [] } = this.state;
 
     return (
       <SafeAreaView style={{ flex:1 }}>
@@ -61,7 +78,7 @@ class Screen extends React.Component {
           <TouchableOpacity onPress={() => this.props.toggleTheme()}>
             <Text style={{ borderRadius: 4, margin: 8, padding: 8, backgroundColor: '#cae', alignSelf: 'stretch', textAlign: 'center' }}>Toogle theme</Text>
           </TouchableOpacity>
-          {cars.map((car, index) => <Car brand={car} amount={amounts[index]} theme={theme} />)}
+          {cars.map((props) => <Car {...props} theme={theme} />)}
         </ScrollView>
       </SafeAreaView>
     )
