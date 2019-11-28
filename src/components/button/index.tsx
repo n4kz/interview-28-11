@@ -3,7 +3,12 @@ import {TouchableOpacity, Text} from 'react-native';
 
 import styles from './styles';
 
-export default class Car extends PureComponent {
+interface Props {
+  onPress: () => void;
+  title: string;
+}
+
+export default class Car extends PureComponent<Props, {}> {
   render() {
     let {onPress, title} = this.props;
 

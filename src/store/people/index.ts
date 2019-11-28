@@ -1,6 +1,6 @@
-import {updatePeopleAction, updatePeople} from '../actions';
+import {updatePeopleAction, updatePeople, Action} from '../actions';
 
-export default function reducer(state = [], action) {
+export default function reducer(state: Array<object> = [], action: Action): Array<object> {
   switch (action.type) {
     case updatePeopleAction: {
       let {people} = action.payload;

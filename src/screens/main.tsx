@@ -1,21 +1,38 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {connect} from 'react-redux';
-import {RefreshControl, FlatList, SafeAreaView, StyleSheet} from 'react-native';
+import {RefreshControl, FlatList, SafeAreaView, StyleSheet, ViewStyle} from 'react-native';
 
 import api from '../../api';
-import Car from '../components/car';
+import Car, {CarProps} from '../components/car';
 import Button from '../components/button';
 import {actions} from '../store';
 
-const styles = StyleSheet.create({
+interface Props {
+  people: Array<object>;
+  theme: string;
+  toggleTheme: Function;
+  updatePeople: Function;
+}
+
+interface State {
+  loading: boolean;
+  cars: Array<object> | null;
+}
+
+interface Styles {
+  flex: ViewStyle;
+}
+
+const styles = StyleSheet.create<Styles>({
   flex: {
     flex: 1,
   },
 });
 
-class MainScreen extends React.Component {
-  state = {
+class MainScreen extends React.Component<Props, State> {
+  state: State = {
     loading: true,
+    cars: null,
   };
 
   _onRefresh = () => {
@@ -36,23 +53,24 @@ class MainScreen extends React.Component {
     toggleTheme();
   };
 
-  _renderHeader = () => {
+  _renderHeader: any = () => {
     return <Button title="Toggle theme" onPress={this._onTheme} />;
   };
 
-  _renderItem = ({item: props}) => {
-    let {theme} = this.props;
+  _renderItem = (args: any) => {
+    let props = args.item;
+    let theme = this.props.theme;
 
     return <Car {...props} theme={theme} />;
   };
 
-  _keyExtractor = ({brand}) => brand;
+  _keyExtractor = (item: any) => item.brand;
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.loadData();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props): void {
     let {people} = this.props;
 
     if (people !== prevProps.people) {
@@ -60,7 +78,7 @@ class MainScreen extends React.Component {
     }
   }
 
-  loadData() {
+  loadData(): void {
     let {updatePeople} = this.props;
 
     api.loadData().then(data => {
@@ -68,13 +86,13 @@ class MainScreen extends React.Component {
     });
   }
 
-  updateCars() {
-    let {people} = this.props;
+  updateCars(): void {
+    let people: Array<object> = this.props.people;
 
-    let cars = people.reduce((store, {car}) => {
-      let amount = store[car.name] || 0;
+    let cars = people.reduce((store: any, item: any) => {
+      let amount = store[item.car.name] || 0;
 
-      store[car.name] = amount + 1;
+      store[item.car.name] = amount + 1;
 
       return store;
     }, {});
@@ -84,20 +102,20 @@ class MainScreen extends React.Component {
     this.setState({cars, loading: false});
   }
 
-  renderRefreshControl() {
-    let {loading} = this.state;
-
-    return <RefreshControl onRefresh={this._onRefresh} refreshing={loading} />;
+  renderRefreshControl(): ReactElement {
+    return (
+      <RefreshControl
+        onRefresh={this._onRefresh}
+        refreshing={this.state.loading}
+      />
+    );
   }
 
-  render() {
-    let {cars, loading} = this.state;
-
+  render(): ReactElement {
     return (
       <SafeAreaView style={styles.flex}>
         <FlatList
-          data={cars}
-          extraData={loading}
+          data={this.state.cars}
           style={styles.flex}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
@@ -110,9 +128,9 @@ class MainScreen extends React.Component {
 }
 
 export default connect(
-  ({people, theme}) => ({
-    people,
-    theme,
+  (state: any) => ({
+    people: state.people,
+    theme: state.theme,
   }),
   actions,
 )(MainScreen);

@@ -3,7 +3,13 @@ import {Text, View} from 'react-native';
 
 import styles from './styles';
 
-export default class Car extends PureComponent {
+export interface CarProps {
+  theme: string;
+  brand: string;
+  amount: number;
+}
+
+export default class Car extends PureComponent<CarProps, {}> {
   render() {
     let {theme, brand, amount} = this.props;
 

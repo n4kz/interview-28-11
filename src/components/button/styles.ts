@@ -1,6 +1,10 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, TextStyle} from 'react-native';
 
-export default StyleSheet.create({
+interface Styles {
+  title: TextStyle;
+}
+
+export default StyleSheet.create<Styles>({
   title: {
     borderRadius: 4,
     margin: 8,

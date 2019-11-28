@@ -3,7 +3,7 @@ import {combineReducers, createStore} from 'redux';
 import peopleReducer, * as peopleActions from './people';
 import themeReducer, * as themeActions from './theme';
 
-export default function init() {
+export default function init(): any {
   const reducer = combineReducers({
     people: peopleReducer,
     theme: themeReducer,
@@ -12,7 +12,7 @@ export default function init() {
   return createStore(reducer);
 }
 
-export const actions = {
+export const actions: object = {
   ...peopleActions,
   ...themeActions,
 };
