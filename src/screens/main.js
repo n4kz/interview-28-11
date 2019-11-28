@@ -2,11 +2,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import { RefreshControl, FlatList, SafeAreaView } from 'react-native';
 
-import api from './api';
-import Car from './src/components/car';
-import Button from './src/components/button';
+import api from '../../api';
+import Car from '../components/car';
+import Button from '../components/button';
 
-class Screen extends React.Component {
+class MainScreen extends React.Component {
   state = {
     loading: true,
   };
@@ -126,4 +126,4 @@ export default connect(
     updatePeople: people => dispatch({type: 'UPDATE_PEOPLE', people}),
     toggleTheme: () => dispatch({type: 'TOGGLE_THEME'}),
   }),
-)(Screen);
+)(MainScreen);

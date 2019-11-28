@@ -2,7 +2,7 @@ import React from 'react';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 
-import Screen from './Screen';
+import MainScreen from './src/screens/main';
 
 let initialState = {
   people: [],
@@ -33,7 +33,7 @@ let store = createStore((state = initialState, action) => {
 const App = () => {
   return (
     <Provider store={store}>
-      <Screen />
+      <MainScreen />
     </Provider>
   );
 };
