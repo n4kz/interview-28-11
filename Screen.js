@@ -21,6 +21,12 @@ class Screen extends React.Component {
     });
   };
 
+  _onTheme = () => {
+    let { toggleTheme } = this.props;
+
+    toggleTheme();
+  };
+
   componentDidMount() {
     this.loadData();
   }
@@ -75,7 +81,7 @@ class Screen extends React.Component {
         <ScrollView
           style={{ flex:1 }}
           refreshControl={<RefreshControl onRefresh={this._onRefresh} refreshing={this.state.loading}/>}>
-          <TouchableOpacity onPress={() => this.props.toggleTheme()}>
+          <TouchableOpacity onPress={this._onTheme}>
             <Text style={{ borderRadius: 4, margin: 8, padding: 8, backgroundColor: '#cae', alignSelf: 'stretch', textAlign: 'center' }}>Toogle theme</Text>
           </TouchableOpacity>
           {cars.map((props) => <Car {...props} theme={theme} />)}
